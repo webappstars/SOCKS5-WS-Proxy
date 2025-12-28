@@ -27,7 +27,7 @@ ENV GOST_USER=name \
 
 # ===== 静态文件 =====
 RUN mkdir -p /var/www/html
-COPY html /var/www/html
+COPY *.html /var/www/html
 
 # ===== Caddy 配置 =====
 COPY Caddyfile /etc/caddy/Caddyfile
