@@ -1,0 +1,11 @@
+:{$CADDY_PORT} {
+
+    encode gzip
+
+    reverse_proxy /ws* 127.0.0.1:{$GOST_PORT} {
+        transport http {
+            versions h1
+        }
+    }
+
+}
