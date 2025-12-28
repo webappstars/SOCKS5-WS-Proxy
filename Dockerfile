@@ -3,7 +3,6 @@ FROM alpine:latest
 ARG GOST_VERSION=2.12.0
 ARG CADDY_VERSION=2.7.6
 
-# 安装依赖
 RUN apk add --no-cache wget tar ca-certificates
 
 # ===== 安装 gost =====
@@ -26,13 +25,16 @@ ENV GOST_USER=name \
     GOST_PORT=9000 \
     CADDY_PORT=3000
 
-# ===== Caddyfile =====
-RUN mkdir -p /etc/caddy
+# ===== 静态文件 =====
+RUN mkdir -p /var/www/html
+COPY html /var/www/html
+
+# ===== Caddy 配置 =====
 COPY Caddyfile /etc/caddy/Caddyfile
 
 EXPOSE 8080
 
-# ===== 同时启动 gost + caddy =====
+# ===== 启动 gost + caddy =====
 CMD sh -c '\
   gost -L "socks5+ws://${GOST_USER}:${GOST_PASS}@127.0.0.1:${GOST_PORT}" & \
   exec caddy run --config /etc/caddy/Caddyfile --adapter caddyfile \
